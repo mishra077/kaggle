@@ -1,5 +1,10 @@
 # ignore .vscode files
 .vscode
 
-# ignore folders
-Titanic/*
+# ignore dataset files
+*.jpg
+*.csv
+*.json
+
+# Folders
+\Titanic\*
