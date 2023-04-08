@@ -3,8 +3,11 @@
 
 # ignore dataset files
 *.jpg
-*.csv
 *.json
 
 # Folders
-Titanic/
+Titanic/datasets/gender_submission.csv
+Titanic/datasets/test.csv
+Titanic/datasets/train.csv
+Benetech-MakingGraphsAccessible/datasets/sample_submission.csv
+Benetech-MakingGraphsAccessible/datasets/train/train.csv
