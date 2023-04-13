@@ -5,6 +5,10 @@
 __pychache__/
 *py[cod]
 
+# Models weights
+*.pth
+*.pt
+
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints
 
