@@ -4,6 +4,7 @@
 # ignore dataset files
 *.jpg
 *.json
+*.pkl
 
 # Folders
 Titanic/datasets/gender_submission.csv
