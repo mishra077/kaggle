@@ -1,6 +1,13 @@
 # ignore .vscode files
 .vscode
 
+# Pycache and compiled python files
+__pychache__/
+*py[cod]
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
 # ignore dataset files
 *.jpg
 *.json
