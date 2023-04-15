@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms, utils
+from PIL import Image
 
 
 # Ignore warnings
@@ -39,11 +40,13 @@ class GraphsImagesDataLoader(Dataset):
     def __getitem__(self, idx):
         img_name = os.path.join(self.dataset_dir, str(self.annotation_info.loc[idx, 'ID'])) + '.jpg'
         image = cv2.imread(img_name)
+        image = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
         graph_type = self.annotation_info.loc[idx, 'chart-type']
-        sample = {'image': image, 'class': graph_type}
 
         if self.transform:
-            sample = self.transform(sample)
+            image = self.transform(image)
+
+        sample = {'image': image, 'class': graph_type}
 
         return sample
     
@@ -51,8 +54,9 @@ class GraphsImagesDataLoader(Dataset):
 if __name__ == '__main__':
     dataset_dir = '../datasets/train/images'
     annotations_dir = '../datasets/train/'
-    dataloader = GraphsImagesDataLoader(dataset_dir, annotations_dir, 1)
+    image_transform = transforms.Compose([transforms.Resize((299, 299)), transforms.ToTensor()])
+    dataloader = GraphsImagesDataLoader(dataset_dir, annotations_dir, 1, transform=image_transform)
     for i in range(len(dataloader)):
         sample = dataloader[i]
-        print(sample['image'].shape, sample['class'])
+        print(sample['image'].size(), sample['class'])
         break
