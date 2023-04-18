@@ -55,13 +55,54 @@ class GraphsImagesDataLoader(Dataset):
 
         return sample
     
+class GraphsImagesDataLoaderTest(Dataset):
+    """Graphs Images Dataset"""
+
+    def __init__(self, dataset_dir, transform=None):
+        """
+        Args:
+            dataset_dir (string): Path to the dataset directory.
+            transform (callable, optional): Optional transform to be applied
+                on a sample.
+        """
+        self.dataset_dir = dataset_dir
+        self.transform = transform
+        self.class_name = ['vertical_bar', 'horizontal_bar', 'dot', 'line', 'scatter']
+        self.files = os.listdir(self.dataset_dir)
+
+    def __len__(self):
+        print(len(os.listdir(self.dataset_dir)))
+        return len(os.listdir(self.dataset_dir))
+    
+    def __getitem__(self, idx):
+        img_name = os.path.join(self.dataset_dir, str(self.files[idx]))
+        image = cv2.imread(img_name)
+        image = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+        graph_type = 0
+
+
+        if self.transform:
+            image = self.transform(image)
+            graph_type = torch.tensor(graph_type)
+
+        sample = {'image': image, 'class': graph_type}
+
+        return sample
+    
 
 # if __name__ == '__main__':
 #     dataset_dir = '../datasets/train/images'
-#     annotations_dir = '../datasets/train/'
+#     dataset_test_dir = '../datasets/test/images'
+#     # annotations_dir = '../datasets/train/'
 #     image_transform = transforms.Compose([transforms.Resize((299, 299)), transforms.ToTensor()])
-#     dataloader = GraphsImagesDataLoader(dataset_dir, annotations_dir, 1, transform=image_transform)
-#     for i in range(len(dataloader)):
-#         sample = dataloader[i]
-#         print(sample['image'].size(), sample['class'])
+#     # dataloader = GraphsImagesDataLoader(dataset_dir, annotations_dir, 1, transform=image_transform)
+#     test_dataloader = GraphsImagesDataLoaderTest(dataset_test_dir, transform=image_transform)
+#     # for i in range(len(dataloader)):
+#     #     sample = dataloader[i]
+#     #     print(sample['image'].size(), sample['class'])
+#     #     break
+#     for i in range(len(test_dataloader)):
+#         sample = test_dataloader[i]
+#         print(sample['image'].size())
 #         break
+

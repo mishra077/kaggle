@@ -14,7 +14,7 @@ from torch.utils.data import Dataset, DataLoader, random_split
 SAVE_DIR = './weights/'
 dataset_dir = './datasets/train/images'
 annotations_dir = './datasets/train/'
-model_checkpoint = '/mnt/c/Users/mishr/Desktop/kaggle/Benetech-MakingGraphsAccessible/weights/inception_v3_wt.pth'
+model_checkpoint = './weights/inception_v3_wt.pth'
 
 # Define the device to be used for training
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -78,7 +78,7 @@ for epoch in range(num_epochs):
             labels = data['class']
             images = images.to(device)
             labels = labels.to(device)
-            outputs, aux_outputs = model(images)
+            outputs= model(images)
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
