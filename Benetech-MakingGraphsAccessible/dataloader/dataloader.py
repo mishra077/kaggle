@@ -14,6 +14,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
+
 class GraphsImagesDataLoader(Dataset):
     """Graphs Images Dataset"""
 
@@ -29,6 +30,7 @@ class GraphsImagesDataLoader(Dataset):
         self.annotation_info = pd.read_csv(self.annotation_dir + 'train.csv')
         self.batch_size = batch_size
         self.transform = transform
+        self.class_name = ['vertical_bar', 'horizontal_bar', 'dot', 'line', 'scatter']
 
     def __len__(self):
         return len(os.listdir(self.dataset_dir))
@@ -41,22 +43,25 @@ class GraphsImagesDataLoader(Dataset):
         img_name = os.path.join(self.dataset_dir, str(self.annotation_info.loc[idx, 'ID'])) + '.jpg'
         image = cv2.imread(img_name)
         image = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-        graph_type = self.annotation_info.loc[idx, 'chart-type']
+        graph_type = str(self.annotation_info.loc[idx, 'chart-type'])
+        graph_type = self.class_name.index(graph_type)
+
 
         if self.transform:
             image = self.transform(image)
+            graph_type = torch.tensor(graph_type)
 
         sample = {'image': image, 'class': graph_type}
 
         return sample
     
 
-if __name__ == '__main__':
-    dataset_dir = '../datasets/train/images'
-    annotations_dir = '../datasets/train/'
-    image_transform = transforms.Compose([transforms.Resize((299, 299)), transforms.ToTensor()])
-    dataloader = GraphsImagesDataLoader(dataset_dir, annotations_dir, 1, transform=image_transform)
-    for i in range(len(dataloader)):
-        sample = dataloader[i]
-        print(sample['image'].size(), sample['class'])
-        break
+# if __name__ == '__main__':
+#     dataset_dir = '../datasets/train/images'
+#     annotations_dir = '../datasets/train/'
+#     image_transform = transforms.Compose([transforms.Resize((299, 299)), transforms.ToTensor()])
+#     dataloader = GraphsImagesDataLoader(dataset_dir, annotations_dir, 1, transform=image_transform)
+#     for i in range(len(dataloader)):
+#         sample = dataloader[i]
+#         print(sample['image'].size(), sample['class'])
+#         break
